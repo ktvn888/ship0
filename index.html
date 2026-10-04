@@ -1,0 +1,506 @@
+<html style="margin:0;padding:0;">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+(function(){
+  var css = ':root{--bg:#f4f7f5;--card:#ffffff;--text:#0f172a;--muted:#64748b;--accent:#00b14f;--accent-soft:rgba(0,177,79,.12);--accent2:#f59e0b;--accent2-soft:rgba(245,158,11,.14);--danger:#ef4444;--info:#3b82f6;--purple:#8b5cf6;--purple-soft:rgba(139,92,246,.10);--pink:#ec4899;--border:rgba(15,23,42,.08);--min-wallet:500000;--min-topup:100000}';
+  css += 'body{font-family:"Nunito",sans-serif}';
+  css += '.wallet-card{transition:transform .25s ease,box-shadow .25s ease}.wallet-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,177,79,.15)}';
+  css += '.trip-item{transition:all .2s ease}.trip-item:hover{background:var(--accent-soft)}';
+  css += '.action-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:12px;font-weight:700;font-size:14px;border:none;cursor:pointer;transition:all .2s ease;-webkit-tap-highlight-color:transparent}.action-btn:active{transform:scale(.97)}';
+  css += '.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{box-shadow:0 6px 20px var(--accent-soft)}';
+  css += '.btn-outline{background:var(--card);color:var(--text);border:1px solid var(--border)}.btn-outline:hover{border-color:var(--accent);color:var(--accent)}';
+  css += '.btn-danger{background:rgba(239,68,68,.1);color:var(--danger);border:1px solid rgba(239,68,68,.3)}.btn-danger:hover{background:var(--danger);color:#fff}';
+  css += '.calc-input{width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font-size:14px;font-family:inherit;outline:none}.calc-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}';
+  css += '.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px;opacity:0;pointer-events:none;transition:opacity .25s ease}.modal-overlay.show{opacity:1;pointer-events:auto}';
+  css += '.modal-box{background:var(--card);border-radius:20px;padding:24px;width:100%;max-width:460px;max-height:92vh;overflow-y:auto;transform:translateY(20px);transition:transform .25s ease}.modal-overlay.show .modal-box{transform:translateY(0)}';
+  css += '.type-pill{padding:10px 6px;border-radius:10px;border:1px solid var(--border);background:var(--bg);font-weight:700;font-size:11px;cursor:pointer;transition:all .2s ease;text-align:center;flex:1;min-width:0;-webkit-tap-highlight-color:transparent}.type-pill.active{background:var(--accent);color:#fff;border-color:var(--accent)}';
+  css += '.pay-pill{padding:8px 4px;border-radius:8px;border:1px solid var(--border);background:var(--bg);font-weight:700;font-size:11px;cursor:pointer;transition:all .2s ease;text-align:center;flex:1;min-width:0;-webkit-tap-highlight-color:transparent}.pay-pill.active{background:var(--info);color:#fff;border-color:var(--info)}';
+  css += '.icon-btn{width:28px;height:28px;border-radius:8px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s ease}';
+  css += '.edit-btn{background:rgba(59,130,246,.1);color:var(--info)}.edit-btn:hover{background:var(--info);color:#fff}';
+  css += '.del-btn{background:rgba(239,68,68,.1);color:var(--danger)}.del-btn:hover{background:var(--danger);color:#fff}';
+  css += '.topup-chip{padding:8px 14px;border-radius:10px;border:1px solid var(--border);background:var(--bg);font-weight:700;font-size:13px;cursor:pointer;transition:all .2s ease;-webkit-tap-highlight-color:transparent}.topup-chip:hover,.topup-chip.active{border-color:var(--accent2);background:var(--accent2-soft);color:var(--accent2)}';
+  css += '@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}.fade-in{animation:fadeIn .3s ease}';
+  css += '.pulse-warn{animation:pulseWarn 1.5s ease-in-out infinite}@keyframes pulseWarn{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.4)}50%{box-shadow:0 0 0 8px rgba(239,68,68,0)}}';
+  var s = document.createElement('style');
+  s.textContent = css;
+  document.head.appendChild(s);
+})();
+</script>
+<div style="color:var(--text);background:radial-gradient(900px 400px at 85% -5%, var(--accent-soft), transparent 60%), var(--bg);min-height:100%;font-family:'Nunito',sans-serif;">
+<div class="max-w-5xl mx-auto px-4 py-8">
+
+<!-- HEADER -->
+<div class="mb-6" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#00913f);display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 6px 18px var(--accent-soft);">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    </div>
+    <div>
+      <h1 style="font-size:24px;font-weight:900;line-height:1.1;">Quản lý thu nhập <span style="color:var(--accent);">Tài xế</span></h1>
+      <p style="font-size:12px;color:var(--muted);font-weight:600;">Grab Bike · Food · Express · Cuốc ngoài · Sửa được khi nhập sai</p>
+    </div>
+  </div>
+  <button id="resetShiftBtn" class="action-btn btn-danger">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+    Đặt lại ca
+  </button>
+</div>
+
+<!-- TIỀN MẶT HIỆN TẠI -->
+<div class="rounded-2xl p-6 mb-5" style="background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;position:relative;overflow:hidden;">
+  <div style="position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:rgba(0,177,79,.15);"></div>
+  <div style="position:absolute;bottom:-40px;right:60px;width:100px;height:100px;border-radius:50%;background:rgba(245,158,11,.12);"></div>
+  <div style="position:relative;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/></svg>
+      <span style="font-size:13px;font-weight:700;opacity:.8;">TIỀN MẶT HIỆN TẠI (HỆ THỐNG TỰ TÍNH)</span>
+    </div>
+    <div id="cashNow" style="font-size:44px;font-weight:900;color:#f59e0b;line-height:1.1;">0 đ</div>
+    <div style="display:flex;gap:20px;margin-top:14px;flex-wrap:wrap;align-items:end;">
+      <div><div style="font-size:10px;opacity:.6;text-transform:uppercase;">Đầu ca (nhập thủ công)</div><input id="cashStart" type="number" style="width:130px;padding:6px 10px;border-radius:8px;border:none;background:rgba(255,255,255,.15);color:#fff;font-weight:800;font-size:15px;outline:none;" placeholder="0"></div>
+      <div><div style="font-size:10px;opacity:.6;text-transform:uppercase;">+ Thu từ cuốc</div><div id="cashEarnedShow" style="font-size:16px;font-weight:800;color:#00b14f;">+0 đ</div></div>
+      <div><div style="font-size:10px;opacity:.6;text-transform:uppercase;">Trả thừa tự động</div><div id="autoRefundShow" style="font-size:16px;font-weight:800;color:#a78bfa;">0 đ</div></div>
+    </div>
+    <div style="font-size:11px;opacity:.6;margin-top:10px;">Nhập tiền đầu ca 1 lần → hệ thống tự cộng tiền mặt từ cuốc & tự trừ trả lại khách</div>
+  </div>
+</div>
+
+<!-- 2 VI -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+  <div class="wallet-card rounded-2xl p-5" style="background:linear-gradient(135deg,#00b14f,#00913f);color:#fff;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.1);"></div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;position:relative;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      <span style="font-size:13px;font-weight:700;opacity:.9;">VÍ TÀI XẾ</span>
+      <span style="margin-left:auto;font-size:10px;background:rgba(255,255,255,.2);padding:3px 8px;border-radius:10px;font-weight:700;">+ Tiền ròng mỗi cuốc</span>
+    </div>
+    <div style="font-size:30px;font-weight:900;position:relative;" id="driverWalletDisplay">0 đ</div>
+    <div style="font-size:11px;opacity:.8;margin-top:4px;position:relative;">Tiền ròng + tip từ các cuốc Grab</div>
+  </div>
+  <div id="creditCard" class="wallet-card rounded-2xl p-5" style="background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.1);"></div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;position:relative;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span style="font-size:13px;font-weight:700;opacity:.9;">VÍ TÍN DỤNG</span>
+      <span style="margin-left:auto;font-size:10px;background:rgba(255,255,255,.25);padding:3px 8px;border-radius:10px;font-weight:700;">Tối thiểu 500k</span>
+    </div>
+    <div style="font-size:30px;font-weight:900;position:relative;" id="creditWalletDisplay">500.000 đ</div>
+    <div id="creditWarn" style="font-size:11px;margin-top:6px;position:relative;background:rgba(239,68,68,.25);padding:6px 10px;border-radius:8px;font-weight:700;display:none;"></div>
+    <button id="topUpBtn" style="margin-top:10px;width:100%;padding:10px;border-radius:10px;background:rgba(255,255,255,.25);color:#fff;font-weight:800;font-size:14px;border:none;cursor:pointer;position:relative;">+ Nạp ví (tối thiểu 100k)</button>
+  </div>
+</div>
+
+<!-- NÚT THÊM CUỐC -->
+<div class="mb-5">
+  <button id="addTripBtn" class="action-btn btn-primary" style="width:100%;padding:16px;font-size:16px;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Thêm cuốc mới
+  </button>
+</div>
+
+<!-- DANH SÁCH CUỐC -->
+<div class="rounded-2xl p-5 mb-5" style="background:var(--card);border:1px solid var(--border);">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+    <h3 style="font-weight:800;font-size:16px;">Danh sách cuốc trong ca <span style="font-size:11px;color:var(--muted);font-weight:600;">(bấm ✏️ để sửa, 🗑 để xóa)</span></h3>
+    <span id="tripCount" style="font-size:12px;font-weight:700;color:var(--muted);background:var(--bg);padding:4px 12px;border-radius:10px;">0 cuốc</span>
+  </div>
+  <div id="tripList" style="display:flex;flex-direction:column;gap:8px;">
+    <div style="padding:24px;text-align:center;color:var(--muted);font-size:13px;border:1px dashed var(--border);border-radius:12px;">Chưa có cuốc nào — nhấn "Thêm cuốc mới" để bắt đầu</div>
+  </div>
+</div>
+
+<!-- TỔNG KẾT THEO LOẠI -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+  <div class="rounded-xl p-4" style="background:var(--card);border:1px solid var(--border);border-left:4px solid #00b14f;">
+    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;">Grab Bike</div>
+    <div id="bikeTotal" style="font-size:20px;font-weight:900;margin-top:4px;">0 đ</div>
+    <div id="bikePct" style="font-size:11px;color:var(--muted);margin-top:2px;">0 cuốc · RR 0%</div>
+  </div>
+  <div class="rounded-xl p-4" style="background:var(--card);border:1px solid var(--border);border-left:4px solid #3b82f6;">
+    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;">Grab Food</div>
+    <div id="foodTotal" style="font-size:20px;font-weight:900;margin-top:4px;">0 đ</div>
+    <div id="foodCount" style="font-size:11px;color:var(--muted);margin-top:2px;">0 cuốc</div>
+  </div>
+  <div class="rounded-xl p-4" style="background:var(--card);border:1px solid var(--border);border-left:4px solid #8b5cf6;">
+    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;">Grab Express</div>
+    <div id="expressTotal" style="font-size:20px;font-weight:900;margin-top:4px;">0 đ</div>
+    <div id="expressCount" style="font-size:11px;color:var(--muted);margin-top:2px;">0 cuốc</div>
+  </div>
+  <div class="rounded-xl p-4" style="background:var(--card);border:1px solid var(--border);border-left:4px solid #f59e0b;">
+    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;">Cuốc ngoài</div>
+    <div id="outsideTotal" style="font-size:20px;font-weight:900;margin-top:4px;">0 đ</div>
+    <div id="outsideCount" style="font-size:11px;color:var(--muted);margin-top:2px;">0 cuốc</div>
+  </div>
+</div>
+
+<!-- TỔNG KẾT CUỐI CA -->
+<div class="rounded-2xl p-6" style="background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;">
+  <h3 style="font-weight:800;font-size:18px;margin-bottom:16px;">Tổng kết ca làm việc</h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;">
+    <div style="background:rgba(255,255,255,.06);border-radius:12px;padding:14px;"><div style="font-size:11px;font-weight:700;opacity:.7;">Tổng thu nhập</div><div id="grandTotal" style="font-size:20px;font-weight:900;color:#00b14f;margin-top:4px;">0 đ</div><div style="font-size:10px;opacity:.6;">Ròng + Tip + Ngoài</div></div>
+    <div style="background:rgba(255,255,255,.06);border-radius:12px;padding:14px;"><div style="font-size:11px;font-weight:700;opacity:.7;">Tiền chuyển khoản</div><div id="bankTotal" style="font-size:20px;font-weight:900;color:#a78bfa;margin-top:4px;">0 đ</div><div style="font-size:10px;opacity:.6;">Khách CK</div></div>
+    <div style="background:rgba(255,255,255,.06);border-radius:12px;padding:14px;"><div style="font-size:11px;font-weight:700;opacity:.7;">Tổng tip nhận</div><div id="tipTotal" style="font-size:20px;font-weight:900;color:#f472b6;margin-top:4px;">0 đ</div><div style="font-size:10px;opacity:.6;">Khách cho boa</div></div>
+    <div style="background:rgba(255,255,255,.06);border-radius:12px;padding:14px;"><div style="font-size:11px;font-weight:700;opacity:.7;">Tổng cuốc + TB</div><div id="grandTrips" style="font-size:20px;font-weight:900;color:#38bdf8;margin-top:4px;">0</div><div style="font-size:10px;opacity:.6;">Trung bình/cuốc</div></div>
+  </div>
+</div>
+
+<p style="text-align:center;font-size:11px;color:var(--muted);margin-top:16px;">Dữ liệu lưu tự động · Sửa/xóa cuốc đều điều chỉnh lại ví tự động</p>
+
+</div>
+</div>
+
+<!-- MODAL: THÊM/SỬA CUỐC -->
+<div id="tripModal" class="modal-overlay">
+  <div class="modal-box">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <h3 id="tripModalTitle" style="font-weight:800;font-size:18px;">Thêm cuốc mới</h3>
+      <button id="closeTripModal" style="width:32px;height:32px;border-radius:8px;border:none;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;">
+      <div class="type-pill active" data-type="bike">Grab Bike</div>
+      <div class="type-pill" data-type="food">Grab Food</div>
+      <div class="type-pill" data-type="express">Grab Express</div>
+      <div class="type-pill" data-type="outside">Cuốc ngoài</div>
+    </div>
+    <div id="tripFormFields" style="display:flex;flex-direction:column;gap:14px;"></div>
+    <div style="display:flex;gap:10px;margin-top:20px;">
+      <button id="cancelTrip" class="action-btn btn-outline" style="flex:1;">Hủy</button>
+      <button id="confirmTrip" class="action-btn btn-primary" style="flex:1;">Xác nhận</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: NẠP VÍ -->
+<div id="topupModal" class="modal-overlay">
+  <div class="modal-box">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <h3 style="font-weight:800;font-size:18px;">Nạp ví tín dụng</h3>
+      <button id="closeTopupModal" style="width:32px;height:32px;border-radius:8px;border:none;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="topupStatus" style="padding:12px 14px;border-radius:10px;font-size:13px;font-weight:700;margin-bottom:14px;"></div>
+    <div style="margin-bottom:14px;">
+      <label style="display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px;">Số tiền nạp (tối thiểu 100.000đ)</label>
+      <input id="topupAmount" type="number" class="calc-input" placeholder="Nhập số tiền nạp">
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;">
+      <span class="topup-chip" data-val="100000">100k</span>
+      <span class="topup-chip" data-val="200000">200k</span>
+      <span class="topup-chip" data-val="300000">300k</span>
+      <span class="topup-chip" data-val="500000">500k</span>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button id="cancelTopup" class="action-btn btn-outline" style="flex:1;">Hủy</button>
+      <button id="confirmTopup" class="action-btn btn-primary" style="flex:1;">Xác nhận nạp</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var MIN_WALLET = 500000, MIN_TOPUP = 100000;
+  var state = { creditWallet: MIN_WALLET, driverWallet: 0, cashStart: 0, trips: [] };
+  try {
+    var raw = localStorage.getItem('driver_income_v6');
+    if (raw) { var p = JSON.parse(raw); state.creditWallet = (typeof p.creditWallet==='number')?p.creditWallet:MIN_WALLET; state.driverWallet=p.driverWallet||0; state.cashStart=p.cashStart||0; state.trips=p.trips||[]; }
+  } catch(e){}
+  function saveState(){ try{ localStorage.setItem('driver_income_v6', JSON.stringify(state)); }catch(e){} }
+  function fmt(n){ return Math.round(n).toLocaleString('vi-VN')+' đ'; }
+  function genId(){ return Date.now().toString(36)+Math.random().toString(36).substr(2,5); }
+
+  var currentType='bike', currentPay='cash', editingId=null;
+
+  function renderTripForm(editTrip){
+    var c=document.getElementById('tripFormFields');
+    var html='';
+    if(currentType==='outside'){
+      var amtVal = editTrip ? editTrip.amount : '';
+      var tipVal = editTrip ? (editTrip.tip||0) : 0;
+      html+='<div><label style="display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px;">Số tiền cuốc ngoài (đ)</label><input id="tripAmount" type="number" class="calc-input" placeholder="Đi bao nhiêu lấy bấy nhiêu" value="'+amtVal+'"></div>';
+      html+='<div><label style="display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px;">Tiền tip (nếu có) (đ)</label><input id="tripTip" type="number" class="calc-input" placeholder="Khách cho boa" value="'+tipVal+'"></div>';
+      html+='<div style="padding:10px 14px;background:var(--accent2-soft);border-radius:10px;font-size:12px;color:var(--accent2);font-weight:600;line-height:1.5;">Cuốc ngoài: tiền + tip cộng trực tiếp vào tiền mặt hiện tại</div>';
+    } else {
+      var gVal = editTrip ? editTrip.gross : '';
+      var nVal = editTrip ? editTrip.net : '';
+      var tVal = editTrip ? (editTrip.tip||0) : 0;
+      var cgVal = editTrip ? (editTrip.cashGiven||0) : '';
+      html+='<div><label style="display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px;">Tiền phải thu của khách (đ)</label><input id="tripGross" type="number" class="calc-input" placeholder="Tổng tiền khách phải trả" value="'+gVal+'"></div>';
+      html+='<div><label style="display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px;">Tiền ròng thực nhận (đ)</label><input id="tripNet" type="number" class="calc-input" placeholder="Số tiền thực nhận sau phí" value="'+nVal+'"></div>';
+      html+='<div><label style="display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px;">Tiền tip khách cho (đ)</label><input id="tripTip" type="number" class="calc-input" placeholder="Khách cho boa (nếu có)" value="'+tVal+'"></div>';
+      if(currentType==='bike'){ html+='<div id="pctPreview" style="padding:10px 14px;background:var(--accent-soft);border-radius:10px;font-size:12px;color:var(--accent);font-weight:700;display:none;"></div>'; }
+      html+='<div><label style="display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:8px;">Phương thức khách thanh toán</label><div style="display:flex;gap:6px;">';
+      html+='<div class="pay-pill'+(currentPay==='cash'?' active':'')+'" data-pay="cash">Tiền mặt</div>';
+      html+='<div class="pay-pill'+(currentPay==='bank'?' active':'')+'" data-pay="bank">Chuyển khoản</div>';
+      html+='<div class="pay-pill'+(currentPay==='wallet'?' active':'')+'" data-pay="wallet">Qua ví</div>';
+      html+='</div></div>';
+      html+='<div id="cashGivenWrap" style="'+(currentPay==='cash'?'':'display:none;')+'">';
+      html+='<label style="display:block;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px;">Số tiền khách đưa (hệ thống tự tính trả lại) — không bắt buộc</label>';
+      html+='<input id="cashGiven" type="number" class="calc-input" placeholder="Khách đưa bao nhiêu (không nhập = đúng đủ)" value="'+cgVal+'">';
+      html+='<div id="refundPreview" style="margin-top:8px;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:700;display:none;"></div>';
+      html+='</div>';
+      html+='<div id="walletPreview" style="padding:10px 14px;border-radius:10px;font-size:12px;font-weight:700;line-height:1.6;background:var(--bg);border:1px solid var(--border);display:none;"></div>';
+    }
+    c.innerHTML=html;
+
+    c.querySelectorAll('.pay-pill').forEach(function(p){
+      p.addEventListener('click',function(){
+        c.querySelectorAll('.pay-pill').forEach(function(x){x.classList.remove('active');});
+        this.classList.add('active');
+        currentPay=this.getAttribute('data-pay');
+        var w=document.getElementById('cashGivenWrap'); if(w) w.style.display=currentPay==='cash'?'block':'none';
+        updAll();
+      });
+    });
+
+    function updAll(){ updWallet(); updRefund(); updPct(); }
+    function updWallet(){
+      var g=parseFloat(document.getElementById('tripGross').value)||0, n=parseFloat(document.getElementById('tripNet').value)||0, tip=parseFloat(document.getElementById('tripTip').value)||0;
+      var wp=document.getElementById('walletPreview');
+      if(g>0&&n>0){
+        wp.style.display='block';
+        var cashNote = currentPay==='cash' ? '<br><span style="color:var(--accent2);">Tiền mặt +' + fmt(g+tip) + '</span>' : (currentPay==='bank'?'<br><span style="color:var(--purple);">Chuyển khoản (không tính tiền mặt)</span>':'<br><span style="color:var(--info);">Qua ví (không tính tiền mặt)</span>');
+        wp.innerHTML='<span style="color:var(--danger);">Ví tín dụng trừ: '+fmt(g)+'</span><br><span style="color:var(--accent);">Ví tài xế cộng: '+fmt(n+tip)+'</span>'+cashNote;
+      } else wp.style.display='none';
+    }
+    function updRefund(){
+      if(currentPay!=='cash') return;
+      var g=parseFloat(document.getElementById('tripGross').value)||0, cg=parseFloat(document.getElementById('cashGiven').value)||0;
+      var rp=document.getElementById('refundPreview');
+      if(cg>0&&g>0){
+        var r=cg-g;
+        if(r>0){ rp.style.display='block'; rp.style.background='rgba(239,68,68,.1)'; rp.style.color='var(--danger)'; rp.textContent='Khách đưa '+fmt(cg)+' → HỆ THỐNG TỰ TRẢ LẠI KHÁCH: '+fmt(r); }
+        else if(r===0){ rp.style.display='block'; rp.style.background='var(--accent-soft)'; rp.style.color='var(--accent)'; rp.textContent='Khách đưa đúng đủ · Không cần trả lại'; }
+        else { rp.style.display='block'; rp.style.background='var(--accent2-soft)'; rp.style.color='var(--accent2)'; rp.textContent='Khách đưa thiếu '+fmt(Math.abs(r)); }
+      } else rp.style.display='none';
+    }
+    function updPct(){
+      if(currentType!=='bike') return;
+      var p=document.getElementById('pctPreview'), g=parseFloat(document.getElementById('tripGross').value)||0, n=parseFloat(document.getElementById('tripNet').value)||0;
+      if(g>0&&n>0){ p.style.display='block'; p.textContent='Tỷ lệ ròng: '+(n/g*100).toFixed(1)+'% · Phí Grab: '+fmt(g-n); } else p.style.display='none';
+    }
+    var gE=document.getElementById('tripGross'),nE=document.getElementById('tripNet'),tE=document.getElementById('tripTip'),cgE=document.getElementById('cashGiven');
+    if(gE) gE.addEventListener('input',updAll);
+    if(nE) nE.addEventListener('input',updAll);
+    if(tE) tE.addEventListener('input',updAll);
+    if(cgE) cgE.addEventListener('input',updRefund);
+    if(editTrip) setTimeout(updAll, 50);
+  }
+
+  function openModal(id){ document.getElementById(id).classList.add('show'); }
+  function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+
+  document.getElementById('addTripBtn').addEventListener('click',function(){
+    editingId=null; currentType='bike'; currentPay='cash';
+    document.getElementById('tripModalTitle').textContent='Thêm cuốc mới';
+    document.getElementById('confirmTrip').textContent='Xác nhận thêm';
+    document.querySelectorAll('.type-pill').forEach(function(x){x.classList.remove('active');});
+    document.querySelector('.type-pill[data-type="bike"]').classList.add('active');
+    renderTripForm(null); openModal('tripModal');
+  });
+  document.getElementById('closeTripModal').addEventListener('click',function(){ closeModal('tripModal'); editingId=null; });
+  document.getElementById('cancelTrip').addEventListener('click',function(){ closeModal('tripModal'); editingId=null; });
+  document.getElementById('topUpBtn').addEventListener('click',function(){ document.getElementById('topupAmount').value=''; updateTopupStatus(); openModal('topupModal'); });
+  document.getElementById('closeTopupModal').addEventListener('click',function(){ closeModal('topupModal'); });
+  document.getElementById('cancelTopup').addEventListener('click',function(){ closeModal('topupModal'); });
+
+  document.querySelectorAll('.type-pill').forEach(function(p){
+    p.addEventListener('click',function(){
+      document.querySelectorAll('.type-pill').forEach(function(x){x.classList.remove('active');});
+      this.classList.add('active'); currentType=this.getAttribute('data-type'); currentPay='cash';
+      // khi đổi loại trong lúc sửa, giữ nguyên editingId nhưng render form mới (không điền sẵn vì loại khác)
+      renderTripForm(null);
+    });
+  });
+
+  function updateTopupStatus(){
+    var el=document.getElementById('topupStatus'), need=MIN_WALLET-state.creditWallet;
+    if(need>0){ var rec=Math.ceil(need/100000)*100000; el.style.background='rgba(239,68,68,.1)'; el.style.color='var(--danger)'; el.innerHTML='Ví hiện tại: <strong>'+fmt(state.creditWallet)+'</strong> · Cần nạp thêm <strong>'+fmt(need)+'</strong> để đủ 500k (gợi ý '+fmt(rec)+')'; }
+    else { el.style.background='var(--accent-soft)'; el.style.color='var(--accent)'; el.innerHTML='Ví hiện tại: <strong>'+fmt(state.creditWallet)+'</strong> · Đã đủ mức tối thiểu'; }
+  }
+
+  document.querySelectorAll('.topup-chip').forEach(function(ch){
+    ch.addEventListener('click',function(){
+      document.querySelectorAll('.topup-chip').forEach(function(x){x.classList.remove('active');});
+      this.classList.add('active'); document.getElementById('topupAmount').value=this.getAttribute('data-val');
+    });
+  });
+
+  document.getElementById('confirmTopup').addEventListener('click',function(){
+    var amt=parseFloat(document.getElementById('topupAmount').value)||0;
+    if(amt<MIN_TOPUP){ alert('Số tiền nạp tối thiểu là 100.000đ'); return; }
+    state.creditWallet+=amt; saveState(); renderAll(); closeModal('topupModal');
+  });
+
+  document.getElementById('confirmTrip').addEventListener('click',function(){
+    var tip=parseFloat(document.getElementById('tripTip').value)||0; if(tip<0)tip=0;
+    if(currentType==='outside'){
+      var amt=parseFloat(document.getElementById('tripAmount').value)||0;
+      if(amt<=0){ alert('Vui lòng nhập số tiền cuốc'); return; }
+      if(editingId){
+        // Sửa cuốc ngoài: chỉ cập nhật amount, tip
+        var idx = state.trips.findIndex(function(t){return t.id===editingId;});
+        if(idx>=0){ state.trips[idx].amount=amt; state.trips[idx].tip=tip; }
+      } else {
+        state.trips.unshift({id:genId(),type:'outside',amount:amt,tip:tip,pay:'cash',autoRefund:0,time:Date.now()});
+      }
+    } else {
+      var gross=parseFloat(document.getElementById('tripGross').value)||0, net=parseFloat(document.getElementById('tripNet').value)||0;
+      if(gross<=0||net<=0){ alert('Vui lòng nhập đủ tiền phải thu và tiền ròng'); return; }
+      if(net>gross){ alert('Tiền ròng không thể lớn hơn tiền phải thu'); return; }
+      var autoRefund=0;
+      if(currentPay==='cash'){
+        var cg=parseFloat(document.getElementById('cashGiven').value)||0;
+        if(cg>gross) autoRefund=cg-gross;
+      }
+      if(editingId){
+        // SỬA CUỐC: hoàn lại giá trị cũ trước, rồi áp giá trị mới
+        var old = state.trips.find(function(t){return t.id===editingId;});
+        if(old && old.type!=='outside'){
+          state.creditWallet += old.gross; // hoàn lại gross cũ
+          state.driverWallet -= (old.net + (old.tip||0)); // trừ lại net+tip cũ
+          if(state.driverWallet<0) state.driverWallet=0;
+        }
+        state.creditWallet -= gross;
+        state.driverWallet += net + tip;
+        var i2 = state.trips.findIndex(function(t){return t.id===editingId;});
+        if(i2>=0){
+          state.trips[i2].type=currentType; state.trips[i2].gross=gross; state.trips[i2].net=net;
+          state.trips[i2].tip=tip; state.trips[i2].pay=currentPay; state.trips[i2].autoRefund=autoRefund;
+          state.trips[i2].cashGiven = currentPay==='cash' ? (parseFloat(document.getElementById('cashGiven').value)||0) : 0;
+        }
+      } else {
+        state.creditWallet-=gross;
+        state.driverWallet+=net+tip;
+        state.trips.unshift({id:genId(),type:currentType,gross:gross,net:net,tip:tip,pay:currentPay,autoRefund:autoRefund,cashGiven:currentPay==='cash'?(parseFloat(document.getElementById('cashGiven').value)||0):0,time:Date.now()});
+      }
+    }
+    editingId=null;
+    saveState(); renderAll(); closeModal('tripModal');
+  });
+
+  // SỬA CUỐC
+  function editTrip(id){
+    var trip = state.trips.find(function(t){return t.id===id;});
+    if(!trip) return;
+    editingId = id;
+    currentType = trip.type;
+    currentPay = trip.pay || 'cash';
+    document.getElementById('tripModalTitle').textContent = '✏️ Sửa cuốc (nhập sai → chỉnh lại)';
+    document.getElementById('confirmTrip').textContent = 'Lưu thay đổi';
+    document.querySelectorAll('.type-pill').forEach(function(x){x.classList.remove('active');});
+    var pill = document.querySelector('.type-pill[data-type="'+trip.type+'"]');
+    if(pill) pill.classList.add('active');
+    renderTripForm(trip);
+    openModal('tripModal');
+  }
+
+  function deleteTrip(id){
+    var trip=state.trips.find(function(t){return t.id===id;});
+    if(!trip) return;
+    if(!confirm('Xóa cuốc này? Tiền sẽ được hoàn lại vào ví tương ứng.')) return;
+    if(trip.type!=='outside'){ state.creditWallet+=trip.gross; state.driverWallet-=(trip.net+(trip.tip||0)); if(state.driverWallet<0)state.driverWallet=0; }
+    state.trips=state.trips.filter(function(t){return t.id!==id;});
+    saveState(); renderAll();
+  }
+
+  document.getElementById('cashStart').addEventListener('input',function(){ state.cashStart=parseFloat(this.value)||0; saveState(); renderSummary(); });
+
+  document.getElementById('resetShiftBtn').addEventListener('click',function(){
+    if(!confirm('Đặt lại ca? Tất cả dữ liệu sẽ bị xóa, ví tín dụng về lại 500k.')) return;
+    state={creditWallet:MIN_WALLET,driverWallet:0,cashStart:0,trips:[]};
+    saveState(); document.getElementById('cashStart').value=0; renderAll();
+  });
+
+  var typeConfig={
+    bike:{name:'Grab Bike',color:'#00b14f',bg:'rgba(0,177,79,.10)',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3-3 4-3 2 3h2"/></svg>'},
+    food:{name:'Grab Food',color:'#3b82f6',bg:'rgba(59,130,246,.10)',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11h18M5 11V7a7 7 0 0 1 14 0v4M4 11v9a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-9"/></svg>'},
+    express:{name:'Grab Express',color:'#8b5cf6',bg:'rgba(139,92,246,.10)',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>'},
+    outside:{name:'Cuốc ngoài',color:'#f59e0b',bg:'rgba(245,158,11,.12)',icon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>'}
+  };
+  var payConfig={cash:{label:'Tiền mặt',color:'#f59e0b'},bank:{label:'Chuyển khoản',color:'#8b5cf6'},wallet:{label:'Qua ví',color:'#3b82f6'}};
+
+  function renderTrips(){
+    var c=document.getElementById('tripList');
+    document.getElementById('tripCount').textContent=state.trips.length+' cuốc';
+    if(state.trips.length===0){ c.innerHTML='<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px;border:1px dashed var(--border);border-radius:12px;">Chưa có cuốc nào — nhấn "Thêm cuốc mới" để bắt đầu</div>'; return; }
+    c.innerHTML=state.trips.map(function(t){
+      var cfg=typeConfig[t.type];
+      var time=new Date(t.time); var ts=('0'+time.getHours()).slice(-2)+':'+('0'+time.getMinutes()).slice(-2);
+      var tip=t.tip||0;
+      var detail='';
+      if(t.type==='outside'){
+        detail='<div style="font-size:12px;color:var(--muted);">Tiền: <strong style="color:var(--accent2);">'+fmt(t.amount)+'</strong>'+(tip>0?' · Tip: <strong style="color:var(--pink);">+'+fmt(tip)+'</strong>':'')+' · <span style="color:var(--accent2);">TM +' + fmt(t.amount+tip) + '</span></div>';
+      } else {
+        var pct=t.gross>0?(t.net/t.gross*100).toFixed(0):0;
+        var pc=payConfig[t.pay]||payConfig.cash;
+        var cashNote = t.pay==='cash' ? ' · <span style="color:var(--accent2);font-weight:700;">TM +'+fmt(t.gross+tip)+'</span>' : '';
+        detail='<div style="font-size:12px;color:var(--muted);">Phải thu: '+fmt(t.gross)+' · Ròng: <strong style="color:var(--accent);">'+fmt(t.net)+'</strong>'+(t.type==='bike'?' · RR '+pct+'%':'')+(tip>0?' · Tip: <strong style="color:var(--pink);">+'+fmt(tip)+'</strong>':'')+(t.autoRefund?' · Trả lại tự động: <strong style="color:var(--purple);">'+fmt(t.autoRefund)+'</strong>':'')+' · <span style="color:'+pc.color+';font-weight:700;">'+pc.label+'</span>'+cashNote+'</div>';
+      }
+      return '<div class="trip-item fade-in" style="display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--bg);">'+
+        '<div style="width:36px;height:36px;border-radius:10px;background:'+cfg.bg+';color:'+cfg.color+';display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+cfg.icon+'</div>'+
+        '<div style="flex:1;min-width:0;"><div style="font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;"><span style="color:'+cfg.color+';">'+cfg.name+'</span><span style="font-size:11px;color:var(--muted);font-weight:600;">'+ts+'</span>'+(tip>0?'<span style="font-size:10px;background:#fce7f3;color:#ec4899;padding:2px 8px;border-radius:8px;font-weight:800;">TIP +'+fmt(tip).replace(' đ','')+'</span>':'')+'</div>'+detail+'</div>'+
+        '<div style="display:flex;gap:6px;flex-shrink:0;">'+
+        '<button class="icon-btn edit-btn" data-edit="'+t.id+'" title="Sửa cuốc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>'+
+        '<button class="icon-btn del-btn" data-del="'+t.id+'" title="Xóa cuốc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>'+
+        '</div></div>';
+    }).join('');
+    c.querySelectorAll('[data-edit]').forEach(function(b){ b.addEventListener('click',function(){ editTrip(this.getAttribute('data-edit')); }); });
+    c.querySelectorAll('[data-del]').forEach(function(b){ b.addEventListener('click',function(){ deleteTrip(this.getAttribute('data-del')); }); });
+  }
+
+  function renderSummary(){
+    var bikeNet=0,bikeGross=0,bikeCount=0,foodNet=0,foodCount=0,expressNet=0,expressCount=0,outsideAmt=0,outsideCount=0,totalTip=0,cashEarned=0,bankEarned=0,autoRefundTotal=0;
+    state.trips.forEach(function(t){
+      var tip=t.tip||0; totalTip+=tip;
+      if(t.autoRefund) autoRefundTotal+=t.autoRefund;
+      if(t.type==='outside'){ outsideAmt+=t.amount; outsideCount++; cashEarned+=t.amount+tip; }
+      else {
+        if(t.type==='bike'){bikeNet+=t.net;bikeGross+=t.gross;bikeCount++;}
+        else if(t.type==='food'){foodNet+=t.net;foodCount++;}
+        else{expressNet+=t.net;expressCount++;}
+        if(t.pay==='cash'){ cashEarned+=t.gross+tip; }
+        else if(t.pay==='bank'){ bankEarned+=t.gross+tip; }
+      }
+    });
+    document.getElementById('bikeTotal').textContent=fmt(bikeNet);
+    document.getElementById('bikePct').textContent=bikeCount+' cuốc · RR '+(bikeGross>0?(bikeNet/bikeGross*100).toFixed(1):0)+'%';
+    document.getElementById('foodTotal').textContent=fmt(foodNet);
+    document.getElementById('foodCount').textContent=foodCount+' cuốc';
+    document.getElementById('expressTotal').textContent=fmt(expressNet);
+    document.getElementById('expressCount').textContent=expressCount+' cuốc';
+    document.getElementById('outsideTotal').textContent=fmt(outsideAmt);
+    document.getElementById('outsideCount').textContent=outsideCount+' cuốc';
+
+    var cashNow = state.cashStart + cashEarned;
+    document.getElementById('cashNow').textContent=fmt(cashNow);
+    document.getElementById('cashEarnedShow').textContent='+'+fmt(cashEarned);
+    document.getElementById('autoRefundShow').textContent=fmt(autoRefundTotal);
+
+    var grandTotal=bikeNet+foodNet+expressNet+outsideAmt+totalTip;
+    var totalTrips=state.trips.length;
+    var avg=totalTrips>0?grandTotal/totalTrips:0;
+    document.getElementById('grandTotal').textContent=fmt(grandTotal);
+    document.getElementById('bankTotal').textContent=fmt(bankEarned);
+    document.getElementById('tipTotal').textContent=fmt(totalTip);
+    document.getElementById('grandTrips').textContent=totalTrips+' · '+fmt(avg).replace(' đ','')+'đ';
+    document.getElementById('driverWalletDisplay').textContent=fmt(state.driverWallet);
+    document.getElementById('creditWalletDisplay').textContent=fmt(state.creditWallet);
+
+    var warn=document.getElementById('creditWarn'), card=document.getElementById('creditCard');
+    if(state.creditWallet<MIN_WALLET){
+      var need=MIN_WALLET-state.creditWallet, rec=Math.ceil(need/100000)*100000;
+      warn.style.display='block'; warn.textContent='CẢNH BÁO: Cần nạp thêm '+fmt(need)+' để đủ 500k (gợi ý '+fmt(rec)+')';
+      card.classList.add('pulse-warn');
+    } else { warn.style.display='none'; card.classList.remove('pulse-warn'); }
+  }
+
+  function renderAll(){ renderTrips(); renderSummary(); }
+  document.getElementById('cashStart').value=state.cashStart||0;
+  renderAll();
+})();
+</script>
+</html>
